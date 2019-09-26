@@ -1,5 +1,3 @@
-//To use this class you need to set the "Api Compatibility Level" to ".NET 2.0"
-//in Edit -> Project Settings -> Player
 using UnityEngine;
 using NaughtyAttributes;
 using System.IO.Ports;
