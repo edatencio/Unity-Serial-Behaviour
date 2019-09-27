@@ -2,13 +2,6 @@ using UnityEngine;
 using NaughtyAttributes;
 using System.Collections.Generic;
 
-public interface ISerialReceiver
-{
-    string name { get; }
-
-    void OnMessageReceived(string msg);
-}
-
 [CreateAssetMenu(fileName = "NewSerialAsset", menuName = "Serial Asset")]
 public class SerialAsset : ScriptableObject
 {
@@ -16,7 +9,6 @@ public class SerialAsset : ScriptableObject
     *** Variables
     *************************************************************************************************/
     [SerializeField, BoxGroup] private bool verboseRegistration;
-    [SerializeField, BoxGroup] private string test;
 
     private List<ISerialReceiver> receivers = new List<ISerialReceiver>();
     private List<string> sendBuffer = new List<string>();
@@ -55,7 +47,7 @@ public class SerialAsset : ScriptableObject
     public void MessageReceived(string message)
     {
         for (int i = 0; i < receivers.Count; i++)
-            receivers[i].OnMessageReceived(message);
+            receivers[i].OnSerialMessageReceived(message);
     }
 
     public void Send(string message)
@@ -78,15 +70,8 @@ public class SerialAsset : ScriptableObject
         sendBuffer.Clear();
     }
 
-    [Button("Invoke: Test")]
-    private void InvokeTest()
-    {
-        MessageReceived(test);
-        test = "";
-    }
-
-    [Button("Log Registered Actions")]
-    private void LogRegisteredActions()
+    [Button("Log Registered Listeners")]
+    private void LogRegisteredListeners()
     {
         for (int i = 0; i < receivers.Count; i++)
             Log.Message(name, "Listener [", i++, "] = ", receivers[i].name);

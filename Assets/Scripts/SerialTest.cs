@@ -31,7 +31,7 @@ public class SerialTest : MonoBehaviour, ISerialReceiver
         serialAsset.Send("test indeed");
     }
 
-    public void OnMessageReceived(string msg)
+    public void OnSerialMessageReceived(string msg)
     {
         if (verboseMessageReceived)
             Debug.Log("Received " + msg);

@@ -10,7 +10,7 @@ public class SerialBehaviour : MonoBehaviour
     *************************************************************************************************/
     [SerializeField, BoxGroup("Settings")] private string port;
     [SerializeField, BoxGroup("Settings")] private int baudRate = 115200;
-    [SerializeField, BoxGroup("Settings")] private bool dontDestroyOnLoad;
+    [SerializeField, BoxGroup("Settings")] private bool singleton;
     [SerializeField, BoxGroup("Settings")] private SerialAsset serialAsset;
     [SerializeField, BoxGroup("Settings")] private SaveToFile serialSave;
     [SerializeField, BoxGroup("Settings")] private SerialMonitor serialMonitor;
@@ -35,44 +35,44 @@ public class SerialBehaviour : MonoBehaviour
     private const float delayBetweenMessages = 0.05f;
 
     /*************************************************************************************************
-    *** Start
+    *** OnEnable
     *************************************************************************************************/
-    private void Start()
+    private void OnEnable()
     {
-        if (dontDestroyOnLoad)
-            DontDestroyOnLoad(gameObject);
-
-        if (FindObjectOfType<SerialBehaviour>() != this)
+        if (singleton)
         {
-            Log.Error(name, "There's more than one SerialBehaviour in scene.");
-            gameObject.SetActive(false);
-            return;
+            if (FindObjectOfType<SerialBehaviour>() != this)
+            {
+                Log.Error(name, "There's more than one SerialBehaviour loaded");
+                gameObject.SetActive(false);
+                return;
+            }
+            else
+            {
+                DontDestroyOnLoad(gameObject);
+            }
         }
 
         if (serialPort == null)
         {
             try
             {
-#if UNITY_EDITOR
-                Log.Warning(name, "SaveToFile overwritten, using port: ", port);
-                serialPort = new SerialPort(port, baudRate, Parity.None, 8, StopBits.One);
-#else
-                if (!LoadSerialConf())
-                        SaveSerialConf();
-#endif
+                if (Application.isEditor)
+                    serialPort = new SerialPort(port, baudRate, Parity.None, 8, StopBits.One);
+                else if (!LoadSerialConf())
+                    SaveSerialConf();
 
                 serialPort.Open();
                 serialPort.ReadTimeout = 1;
             }
             catch (Exception e)
             {
-                Log.Error(name, "IOException = ", e.ToString());
+                Log.Error(name, "> Error creating serial port:\n", e.ToString());
             }
         }
 
         timer = new Timer();
         timer.Start();
-
         serialAsset.ClearSendBuffer();
     }
 
@@ -118,7 +118,7 @@ public class SerialBehaviour : MonoBehaviour
             serialMonitor.Add("<- ", msg);
 
             if (verboseWrite)
-                Log.Message(name, ": <<< Sended Message = ", msg);
+                Log.Message(name, ": <- Sended Message = ", msg);
         }
         catch (Exception e)
         {
@@ -157,7 +157,7 @@ public class SerialBehaviour : MonoBehaviour
 
                     // Debug
                     if (verboseRead)
-                        Log.Message(name, ">>> Recieved Message = ", msg);
+                        Log.Message(name, "-> Recieved Message = ", msg);
 
                     if (verboseUnicodeRead)
                     {
@@ -165,7 +165,7 @@ public class SerialBehaviour : MonoBehaviour
                         foreach (char c in msg)
                             unicode += c;
 
-                        Log.Message(name, ">>> Received Total Unicode = ", msg);
+                        Log.Message(name, "-> Received Total Unicode = ", msg);
                     }
                 }
             }
