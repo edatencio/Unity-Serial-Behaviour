@@ -55,6 +55,26 @@ public class SerialAsset : ScriptableObject
         sendBuffer.Add(message);
     }
 
+    public void Send(params string[] messages)
+    {
+        string msg = "";
+
+        for (int i = 0; i < messages.Length; i++)
+            msg += messages[i];
+        
+        sendBuffer.Add(msg);
+    }
+
+    public void Send(params object[] messages)
+    {
+        string msg = "";
+
+        for (int i = 0; i < messages.Length; i++)
+            msg += messages[i].ToString();
+        
+        sendBuffer.Add(msg);
+    }
+
     public string[] GetSendBuffer(bool andClear = false)
     {
         string[] messages = sendBuffer.ToArray();

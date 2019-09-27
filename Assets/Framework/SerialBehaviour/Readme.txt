@@ -4,7 +4,7 @@
 # Version = 2.0
 ###~
 
-# Set the "Api Compatibility Level" to ".NET 2.0" in: 
+# Set the "Api Compatibility Level" to ".NET 2.0" in: 
 Edit -> Project Settings -> Player
 
 # Drag and drop the Serial Behaviour prefab into the preload scene
