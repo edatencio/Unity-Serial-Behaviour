@@ -148,8 +148,8 @@ public class SerialBehaviour : MonoBehaviour
                 string msg;
                 for (int index = 0, prevIndex = 0, i = 0; i < count; i++)
                 {
-                    index = message.IndexOf(';');
-                    msg = message.Substring(prevIndex, index);
+                    index = message.IndexOf(';', prevIndex);
+                    msg = message.Substring(prevIndex, index - prevIndex);
                     prevIndex = index + 1;
 
                     serialAsset.MessageReceived(msg);
