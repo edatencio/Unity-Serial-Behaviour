@@ -15,7 +15,6 @@ public class SerialBehaviour : MonoBehaviour
     [SerializeField, BoxGroup("Settings")] private SaveToFile serialSave;
     [SerializeField, BoxGroup("Settings")] private SerialMonitor serialMonitor;
 
-    [SerializeField, BoxGroup("Debug")] private bool overrideSaveToFile;
     [SerializeField, BoxGroup("Debug")] private bool verboseRead;
     [SerializeField, BoxGroup("Debug")] private bool verboseUnicodeRead;
     [SerializeField, BoxGroup("Debug")] private bool verboseWrite;
