@@ -1,7 +1,7 @@
 ###-
 # Author = Edward Atencio
 # Name = SerialBehaviour
-# Version = 2.1
+# Version = 2.2
 ###~
 
 # Set the "Api Compatibility Level" to ".NET 2.0" in: 
