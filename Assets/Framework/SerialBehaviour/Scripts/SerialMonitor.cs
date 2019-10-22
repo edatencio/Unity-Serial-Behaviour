@@ -7,10 +7,11 @@ public class SerialMonitor : MonoBehaviour
      /*************************************************************************************************
      *** Variables
      *************************************************************************************************/
-     [SerializeField, BoxGroup("Serial Monitor")] private GameObject canvas;
-     [SerializeField, BoxGroup("Serial Monitor")] private Text text;
-     [SerializeField, BoxGroup("Serial Monitor")] private Scrollbar verticalScrollbar;
-     [SerializeField, BoxGroup("Serial Monitor")] private Button autoScrollButton;
+     [SerializeField, BoxGroup("Settings")] private bool hideIfNotDebugBuild;
+     [SerializeField, BoxGroup("Settings")] private GameObject canvas;
+     [SerializeField, BoxGroup("Settings")] private Text text;
+     [SerializeField, BoxGroup("Settings")] private Scrollbar verticalScrollbar;
+     [SerializeField, BoxGroup("Settings")] private Button autoScrollButton;
 
      private bool autoScroll;
      private float vertical;
@@ -29,7 +30,7 @@ public class SerialMonitor : MonoBehaviour
 
           Enabled = true;
 
-          if (!Debug.isDebugBuild)
+          if (hideIfNotDebugBuild && !Debug.isDebugBuild)
                Disable();
 
           // Call to trigger an update of the button color

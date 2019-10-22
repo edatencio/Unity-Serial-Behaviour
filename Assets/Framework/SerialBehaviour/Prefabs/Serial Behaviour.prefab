@@ -503,11 +503,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   port: COM2
   baudRate: 115200
-  dontDestroyOnLoad: 1
+  singleton: 1
   serialAsset: {fileID: 11400000, guid: 5fba930475e0622418c06d4aa66ff3fc, type: 2}
   serialSave: {fileID: 11400000, guid: a27f657043697ca46922bd769aecc2dc, type: 2}
   serialMonitor: {fileID: 114880726155300966}
-  overrideSaveToFile: 1
   verboseRead: 0
   verboseUnicodeRead: 0
   verboseWrite: 0
@@ -879,6 +878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d5afa286f3f17240a1306af5be711b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hideIfNotDebugBuild: 1
   canvas: {fileID: 1694120121283174}
   text: {fileID: 114821627951002596}
   verticalScrollbar: {fileID: 114097153124617532}
