@@ -23,7 +23,6 @@ public class SerialBehaviour : MonoBehaviour
 
     private SerialPort serialPort;
     private Timer timer;
-    private byte chr;
     private string message = "";
 
     private const string portKey = "Port";
@@ -129,27 +128,32 @@ public class SerialBehaviour : MonoBehaviour
     {
         try
         {
-            message = "";
+            // This is not an infinite loop because when the serial port times out, it throws a
+            // TimeoutException exception
+            char chr;
             while (true)
             {
-                chr = (byte)serialPort.ReadByte();
+                chr = (char)serialPort.ReadByte();
                 if (chr == 255) break;
-                message += (char)chr;
+                message += chr;
             }
         }
-        catch { }
+        catch (TimeoutException) { }
 
         if (!string.IsNullOrEmpty(message) && message.IndexOf(';') >= 0)
         {
             try
             {
-                int count = message.Length - message.Replace(";", "").Length;
+                int messageCount = message.Length - message.Replace(";", "").Length;
+                int messagesLength = 0;
                 string msg;
-                for (int index = 0, prevIndex = 0, i = 0; i < count; i++)
+                for (int index = 0, prevIndex = 0, i = 0; i < messageCount; i++)
                 {
                     index = message.IndexOf(';', prevIndex);
                     msg = message.Substring(prevIndex, index - prevIndex);
                     prevIndex = index + 1;
+
+                    messagesLength += msg.Length + 1; // Including the ';' character
 
                     serialAsset.MessageReceived(msg);
                     serialMonitor.Add("-> ", msg);
@@ -167,6 +171,8 @@ public class SerialBehaviour : MonoBehaviour
                         Log.Message(name, "-> Received Total Unicode = ", msg);
                     }
                 }
+
+                message = message.Substring(messagesLength);
             }
             catch (Exception e)
             {
